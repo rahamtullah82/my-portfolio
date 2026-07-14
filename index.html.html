@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Rahamtullah — Cloud Engineer in Training</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;700;800&family=Inter:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0b1220;
+    --bg-raised: #101a2c;
+    --line: rgba(232,237,244,0.10);
+    --text: #e8edf4;
+    --text-dim: #8b98ad;
+    --text-faint: #566079;
+    --amber: #f0a202;
+    --teal: #2dd4bf;
+    --slate-blue: #5b7fff;
+  }
+
+  *{ margin:0; padding:0; box-sizing:border-box; }
+
+  html{ scroll-behavior: smooth; }
+
+  body{
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', system-ui, sans-serif;
+    line-height: 1.6;
+    overflow-x: hidden;
+  }
+
+  ::selection{ background: var(--amber); color: #0b1220; }
+
+  .mono{ font-family: 'JetBrains Mono', monospace; }
+
+  a{ color: inherit; }
+
+  .wrap{
+    max-width: 880px;
+    margin: 0 auto;
+    padding: 0 28px;
+  }
+
+  /* ---------- NAV ---------- */
+  nav{
+    position: sticky;
+    top: 0;
+    z-index: 50;
+    background: rgba(11,18,32,0.85);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid var(--line);
+  }
+  nav .wrap{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    height: 60px;
+  }
+  .nav-brand{
+    font-family:'JetBrains Mono', monospace;
+    font-weight:700;
+    font-size:14px;
+    color: var(--teal);
+    letter-spacing: 0.5px;
+  }
+  .nav-links{
+    display:flex;
+    gap: 24px;
+    list-style:none;
+  }
+  .nav-links a{
+    font-family:'JetBrains Mono', monospace;
+    font-size:12.5px;
+    text-decoration:none;
+    color: var(--text-dim);
+    transition: color 0.2s;
+  }
+  .nav-links a:hover{ color: var(--amber); }
+
+  /* ---------- HERO / TERMINAL ---------- */
+  .hero{
+    padding: 72px 0 56px;
+  }
+  .terminal{
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+    box-shadow: 0 30px 70px rgba(0,0,0,0.45);
+  }
+  .terminal-bar{
+    display:flex;
+    align-items:center;
+    gap: 8px;
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--line);
+    background: rgba(255,255,255,0.02);
+  }
+  .dot{ width:10px; height:10px; border-radius:50%; }
+  .dot.red{ background:#f87171; }
+  .dot.yellow{ background:#facc15; }
+  .dot.green{ background:#4ade80; }
+  .terminal-title{
+    margin-left: 10px;
+    font-family:'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    color: var(--text-faint);
+  }
+  .terminal-body{
+    padding: 26px 24px 30px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 14.5px;
+  }
+  .terminal-line{
+    display:flex;
+    gap: 10px;
+    margin-bottom: 10px;
+    opacity: 0;
+    animation: lineIn 0.5s ease forwards;
+  }
+  .terminal-line .prompt{ color: var(--teal); flex-shrink:0; }
+  .terminal-line .cmd{ color: var(--text-dim); }
+  .terminal-line .out{ color: var(--text); }
+  .terminal-line:nth-child(1){ animation-delay: 0.1s; }
+  .terminal-line:nth-child(2){ animation-delay: 0.5s; }
+  .terminal-line:nth-child(3){ animation-delay: 1.3s; }
+  .terminal-line:nth-child(4){ animation-delay: 1.7s; }
+  .terminal-line:nth-child(5){ animation-delay: 2.3s; }
+
+  @keyframes lineIn{
+    from{ opacity:0; transform: translateY(4px); }
+    to{ opacity:1; transform: translateY(0); }
+  }
+
+  .path-chain{
+    display:flex;
+    flex-wrap: wrap;
+    align-items:center;
+    gap: 8px;
+    margin-top: 2px;
+  }
+  .path-chain .stage{
+    color: var(--text);
+  }
+  .path-chain .stage.primary{ color: var(--amber); font-weight: 700; }
+  .path-chain .arrow{ color: var(--text-faint); }
+
+  .cursor{
+    display:inline-block;
+    width: 8px;
+    height: 16px;
+    background: var(--teal);
+    margin-left: 2px;
+    animation: blink 1s step-end infinite;
+    vertical-align: middle;
+  }
+  @keyframes blink{ 50%{ opacity:0; } }
+
+  h1.name{
+    margin-top: 26px;
+    font-family:'JetBrains Mono', monospace;
+    font-size: clamp(28px, 5vw, 40px);
+    font-weight: 800;
+    letter-spacing: -0.5px;
+  }
+  .tagline{
+    margin-top: 8px;
+    color: var(--text-dim);
+    font-size: 16px;
+    max-width: 560px;
+  }
+  .location{
+    margin-top: 14px;
+    font-family:'JetBrains Mono', monospace;
+    font-size: 12.5px;
+    color: var(--text-faint);
+  }
+
+  /* ---------- SECTION HEADERS ---------- */
+  section{ padding: 56px 0; border-top: 1px solid var(--line); }
+  .eyebrow{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 12px;
+    color: var(--teal);
+    letter-spacing: 1.5px;
+    text-transform: uppercase;
+    margin-bottom: 10px;
+  }
+  h2{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 22px;
+    font-weight: 700;
+    margin-bottom: 28px;
+  }
+
+  /* ---------- ABOUT ---------- */
+  .about-grid{
+    display:grid;
+    grid-template-columns: 96px 1fr;
+    gap: 24px;
+    align-items:start;
+  }
+  .avatar{
+    width: 96px;
+    height: 96px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, var(--slate-blue), var(--teal));
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-family:'JetBrains Mono', monospace;
+    font-weight: 800;
+    font-size: 30px;
+    color: #0b1220;
+    flex-shrink: 0;
+  }
+  /* 📸 PHOTO YAHAN ADD KAREIN: is .avatar div ko replace kar dena
+     <img class="avatar" src="apni-photo.jpg" alt="Rahamtullah" style="object-fit:cover;"> */
+  .about-text p{ color: var(--text-dim); margin-bottom: 14px; font-size: 15px; }
+  .about-text strong{ color: var(--text); }
+
+  /* ---------- STATUS PANEL (signature element) ---------- */
+  .status-panel{
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    overflow: hidden;
+  }
+  .status-row{
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    padding: 16px 20px;
+    border-bottom: 1px solid var(--line);
+    gap: 16px;
+  }
+  .status-row:last-child{ border-bottom: none; }
+  .status-left{ display:flex; align-items:center; gap: 14px; }
+  .status-indicator{
+    width: 9px; height: 9px; border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .status-indicator.operational{ background: var(--teal); box-shadow: 0 0 10px rgba(45,212,191,0.6); }
+  .status-indicator.progress{ background: var(--amber); box-shadow: 0 0 10px rgba(240,162,2,0.6); animation: pulse 1.6s ease-in-out infinite; }
+  .status-indicator.queued{ background: var(--slate-blue); opacity: 0.6; }
+  .status-indicator.planned{ background: var(--text-faint); }
+  @keyframes pulse{ 0%,100%{ opacity:1; } 50%{ opacity:0.4; } }
+
+  .status-name{ font-weight: 600; font-size: 15px; }
+  .status-sub{ font-family:'JetBrains Mono', monospace; font-size: 11.5px; color: var(--text-faint); margin-top: 2px; }
+  .status-badge{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: 20px;
+    white-space: nowrap;
+    flex-shrink: 0;
+  }
+  .status-badge.operational{ color: var(--teal); background: rgba(45,212,191,0.1); border: 1px solid rgba(45,212,191,0.3); }
+  .status-badge.progress{ color: var(--amber); background: rgba(240,162,2,0.1); border: 1px solid rgba(240,162,2,0.3); }
+  .status-badge.queued{ color: var(--slate-blue); background: rgba(91,127,255,0.1); border: 1px solid rgba(91,127,255,0.3); }
+  .status-badge.planned{ color: var(--text-faint); background: rgba(255,255,255,0.03); border: 1px solid var(--line); }
+
+  /* ---------- SKILLS (package manager style) ---------- */
+  .pkg-list{
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 20px 24px;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 13.5px;
+  }
+  .pkg-header{ color: var(--text-faint); margin-bottom: 14px; }
+  .pkg-row{
+    display:flex;
+    justify-content: space-between;
+    padding: 7px 0;
+    border-bottom: 1px dashed var(--line);
+  }
+  .pkg-row:last-child{ border-bottom: none; }
+  .pkg-name{ color: var(--text); }
+  .pkg-name .ns{ color: var(--text-faint); }
+  .pkg-ver{ color: var(--teal); }
+
+  /* ---------- PROJECTS ---------- */
+  .projects{
+    display: grid;
+    gap: 16px;
+  }
+  .project-card{
+    background: var(--bg-raised);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 22px 24px;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .project-card:hover{ border-color: rgba(45,212,191,0.35); transform: translateY(-2px); }
+  .project-top{
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+    margin-bottom: 8px;
+  }
+  .project-name{ font-weight: 700; font-size: 16px; }
+  .project-tag{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: var(--text-faint);
+    border: 1px solid var(--line);
+    padding: 3px 8px;
+    border-radius: 20px;
+  }
+  .project-desc{ color: var(--text-dim); font-size: 14px; margin-bottom: 12px; }
+  .project-stack{
+    display:flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    font-family:'JetBrains Mono', monospace;
+    font-size: 11px;
+    color: var(--slate-blue);
+  }
+
+  /* ---------- GOAL / SCHOLARSHIP STRIP ---------- */
+  .goal-strip{
+    border: 1px solid rgba(240,162,2,0.25);
+    background: rgba(240,162,2,0.06);
+    border-radius: 10px;
+    padding: 20px 24px;
+    display:flex;
+    gap: 16px;
+    align-items:flex-start;
+  }
+  .goal-strip .mark{ color: var(--amber); font-family:'JetBrains Mono', monospace; font-weight:800; }
+  .goal-strip p{ color: var(--text-dim); font-size: 14px; }
+  .goal-strip strong{ color: var(--text); }
+
+  /* ---------- CONTACT / FOOTER ---------- */
+  footer{
+    padding: 56px 0 60px;
+    border-top: 1px solid var(--line);
+    text-align: center;
+  }
+  .contact-links{
+    display:flex;
+    justify-content:center;
+    gap: 14px;
+    flex-wrap: wrap;
+    margin-bottom: 24px;
+  }
+  .contact-links a{
+    font-family:'JetBrains Mono', monospace;
+    font-size: 13px;
+    text-decoration:none;
+    padding: 10px 18px;
+    border: 1px solid var(--line);
+    border-radius: 8px;
+    color: var(--text);
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .contact-links a:hover{ border-color: var(--teal); color: var(--teal); }
+  footer .fine{ color: var(--text-faint); font-size: 12px; font-family:'JetBrains Mono', monospace; }
+
+  @media (max-width: 560px){
+    .about-grid{ grid-template-columns: 1fr; }
+    .avatar{ width: 72px; height: 72px; font-size: 24px; }
+    .status-row{ flex-wrap: wrap; }
+  }
+
+  @media (prefers-reduced-motion: reduce){
+    *{ animation: none !important; transition: none !important; }
+    .terminal-line{ opacity: 1; }
+  }
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="wrap">
+    <div class="nav-brand">rahamtullah@portfolio</div>
+    <ul class="nav-links">
+      <li><a href="#about">about</a></li>
+      <li><a href="#path">path</a></li>
+      <li><a href="#skills">skills</a></li>
+      <li><a href="#projects">projects</a></li>
+      <li><a href="#contact">contact</a></li>
+    </ul>
+  </div>
+</nav>
+
+<header class="hero">
+  <div class="wrap">
+    <div class="terminal">
+      <div class="terminal-bar">
+        <span class="dot red"></span>
+        <span class="dot yellow"></span>
+        <span class="dot green"></span>
+        <span class="terminal-title">bash — ~/rahamtullah</span>
+      </div>
+      <div class="terminal-body">
+        <div class="terminal-line"><span class="prompt">$</span><span class="cmd">whoami</span></div>
+        <div class="terminal-line"><span class="out">Rahamtullah — BS Information Technology (applying)</span></div>
+        <div class="terminal-line"><span class="prompt">$</span><span class="cmd">career --focus</span></div>
+        <div class="terminal-line">
+          <div class="path-chain">
+            <span class="stage primary">Cloud Computing</span>
+            <span class="cursor"></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <h1 class="name">Rahamtullah</h1>
+    <p class="tagline">IT student building toward cloud infrastructure — one command, one deployment at a time.</p>
+    <p class="location mono">📍 Dadu, Sindh, Pakistan</p>
+  </div>
+</header>
+
+<section id="about">
+  <div class="wrap">
+    <p class="eyebrow">// about</p>
+    <h2>Who I am</h2>
+    <div class="about-grid">
+      <!-- 📸 PHOTO YAHAN ADD KAREIN: neeche wali div ko is se replace kar dena —
+           <img class="avatar" src="apni-photo.jpg" alt="Rahamtullah" style="object-fit:cover;"> -->
+      <div class="avatar">R</div>
+      <div class="about-text">
+        <p>I switched from a Pre-Medical background into Information Technology because I wanted to <strong>build digital solutions for my community</strong> — not just study them.</p>
+        <p>I've just cleared college and am now applying for my <strong>bachelor's degree</strong>, aiming for a good university. Alongside that, I'm laying down Linux and shell foundations, working my way toward <strong>cloud infrastructure and automation</strong>. Every concept gets fully understood before I move to the next — no shortcuts, no gaps.</p>
+        <p>Long-term, I'm aiming for a <strong>master's at a strong university</strong>, going deeper into cloud computing.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="path">
+  <div class="wrap">
+    <p class="eyebrow">// career path — status</p>
+    <h2>Where I'm headed</h2>
+    <div class="status-panel">
+      <div class="status-row">
+        <div class="status-left">
+          <span class="status-indicator progress"></span>
+          <div>
+            <div class="status-name">Cloud Computing</div>
+            <div class="status-sub">AWS · Linux · Bash · EC2</div>
+          </div>
+        </div>
+        <span class="status-badge progress">in progress</span>
+      </div>
+      <div class="status-row">
+        <div class="status-left">
+          <span class="status-indicator queued"></span>
+          <div>
+            <div class="status-name">AWS Certifications</div>
+            <div class="status-sub">Progressive track, alongside degree</div>
+          </div>
+        </div>
+        <span class="status-badge queued">queued</span>
+      </div>
+      <div class="status-row">
+        <div class="status-left">
+          <span class="status-indicator queued"></span>
+          <div>
+            <div class="status-name">BS Information Technology</div>
+            <div class="status-sub">Applying now — targeting a good university</div>
+          </div>
+        </div>
+        <span class="status-badge queued">applying</span>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="skills">
+  <div class="wrap">
+    <p class="eyebrow">// skills</p>
+    <h2>Currently installed</h2>
+    <div class="pkg-list">
+      <div class="pkg-header">$ skills list --installed</div>
+      <div class="pkg-row"><span class="pkg-name"><span class="ns">linux/</span>bash-scripting</span><span class="pkg-ver">learning</span></div>
+      <div class="pkg-row"><span class="pkg-name"><span class="ns">linux/</span>wsl2-ubuntu</span><span class="pkg-ver">configured</span></div>
+      <div class="pkg-row"><span class="pkg-name"><span class="ns">cloud/</span>aws-ec2</span><span class="pkg-ver">hands-on</span></div>
+      <div class="pkg-row"><span class="pkg-name"><span class="ns">web/</span>python-flask</span><span class="pkg-ver">applied</span></div>
+      <div class="pkg-row"><span class="pkg-name"><span class="ns">web/</span>html-css-js</span><span class="pkg-ver">applied</span></div>
+      <div class="pkg-row"><span class="pkg-name"><span class="ns">tools/</span>git</span><span class="pkg-ver">next up</span></div>
+      <div class="pkg-row"><span class="pkg-name"><span class="ns">tools/</span>aws-cli</span><span class="pkg-ver">next up</span></div>
+    </div>
+  </div>
+</section>
+
+<section id="projects">
+  <div class="wrap">
+    <p class="eyebrow">// projects</p>
+    <h2>Things I've shipped</h2>
+    <div class="projects">
+      <div class="project-card">
+        <div class="project-top">
+          <span class="project-name">Real-Time Weather App</span>
+          <span class="project-tag">live</span>
+        </div>
+        <p class="project-desc">A weather lookup app that pulls live conditions by city — temperature, humidity, wind, and feel — built first as a Flask app on AWS EC2, then rebuilt as a static client-side version for GitHub Pages.</p>
+        <div class="project-stack">
+          <span>Python</span><span>Flask</span><span>AWS EC2</span><span>OpenWeatherMap API</span><span>HTML/CSS/JS</span>
+        </div>
+      </div>
+      <div class="project-card">
+        <div class="project-top">
+          <span class="project-name">Bash Scripting Coursework</span>
+          <span class="project-tag">study</span>
+        </div>
+        <p class="project-desc">Worked through file management, Linux automation, system administration, and DevOps automation fundamentals — building the shell foundation the cloud path is standing on.</p>
+        <div class="project-stack">
+          <span>Bash</span><span>Linux</span><span>Shell Scripting</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section id="goal">
+  <div class="wrap">
+    <div class="goal-strip">
+      <span class="mark">→</span>
+      <p><strong>Currently targeting:</strong> a good university for my bachelor's, AWS certifications along the way, remote cloud engineering work after graduation, and eventually a master's at a strong university to go deeper into cloud computing.</p>
+    </div>
+  </div>
+</section>
+
+<footer id="contact">
+  <div class="wrap">
+    <p class="eyebrow" style="text-align:center;">// contact</p>
+    <div class="contact-links">
+      <a href="https://github.com/rahamtullah82" target="_blank" rel="noopener">GitHub</a>
+      <a href="mailto:your-email@example.com">Email</a>
+      <a href="#" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+    <p class="fine">built with bash, patience, and one command at a time.</p>
+  </div>
+</footer>
+
+</body>
+</html>
